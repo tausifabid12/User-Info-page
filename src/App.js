@@ -3,19 +3,24 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import './App.css';
+import Loading from './components/Loading/Loading';
 import UserInfoCard from './components/userInfoCard/UserInfoCard';
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [size] = useState(3);
 
-  const { data: userData } = useQuery({
+  const { data: userData, isLoading } = useQuery({
     queryKey: ['userData'],
     queryFn: () =>
       fetch('https://jsonplaceholder.typicode.com/users').then((res) =>
         res.json()
       ),
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const pages = Math.ceil(userData?.length / size);
 
